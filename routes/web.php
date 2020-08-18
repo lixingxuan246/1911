@@ -16,3 +16,11 @@ Route::get('/', function () {
 });
 Route::any('/info','Pc\RedController@info');
 Route::any('/reg/imgcode','Pc\RedController@test');
+
+Route::post('/login','LoginController@login');
+Route::get('/test','LoginController@test');
+Route::get('/showImageCode','LoginController@showImageCode');
+
+
+Route::get('/getImgUrl','LoginController@getImageCodeUrl');
+
