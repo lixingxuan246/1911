@@ -14,3 +14,5 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::any('/info','Pc\RedController@info');
+Route::any('/reg/imgcode','Pc\RedController@test');
