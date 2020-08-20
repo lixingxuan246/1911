@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use AlibabaCloud\Client\AlibabaCloud;
-
+use App\Exceptions\ApiException;
 use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
-class LoginController extends Controller
+class LoginController extends CommonController
 {
     /*
      * 登录接口
@@ -27,39 +27,45 @@ class LoginController extends Controller
     }
 
 
-    public function sendSms($mobile,$code){
-        AlibabaCloud::accessKeyClient('LTAI4Fn3dy5uP4XWA1AJnaRC', 'tSxDFdkwUG0EVtJ7GTcY24Y2mUf85V')
-            ->regionId('cn-hangzhou')
-            ->asDefaultClient();
+    public function sendMsgCode(){
 
-        try {
-            $result = AlibabaCloud::rpc()
-                ->product('Dysmsapi')
-                // ->scheme('https') // https | http
-                ->version('2017-05-25')
-                ->action('SendSms')
-                ->method('POST')
-                ->host('dysmsapi.aliyuncs.com')
-                ->options([
-                    'query' => [
-                        'RegionId' => "cn-hangzhou",
-                        'PhoneNumbers' => $mobile,
-                        'SignName' => "小星",
-                        'TemplateCode' => "SMS_181200828",
-                        'TemplateParam' => "{code:$code}",
-                    ],
-                ])
-                ->request();
-            return $result->toArray();
-        } catch (ClientException $e) {
-            return $e->getErrorMessage();
-        } catch (ServerException $e) {
-            return $e->getErrorMessage();
+        $host = "http://dingxin.market.alicloudapi.com";
+        $path = "/dx/sendSms";
+        $method = "POST";
+        $appcode = "你自己的AppCode";
+        $headers = array();
+        array_push($headers, "Authorization:APPCODE " . $appcode);
+        $querys = "mobile=159xxxx9999&param=code%3A1234&tpl_id=TP1711063";
+        $bodys = "";
+        $url = $host . $path . "?" . $querys;
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_FAILONERROR, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        if (1 == strpos("$".$host, "https://"))
+        {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         }
-
+        var_dump(curl_exec($curl));
     }
 
     public function showImageCode(){
+
+        $request = request();
+        $sid = $request->get('sid');
+        if( empty($sid) ){
+            throw new ApiException("图片验证码输入失败");
+        }
+
+        $request -> session() ->  setid('sid');
+        $request -> session() -> start();
+
+
 // Set the content-type
         header('Content-Type: image/png');
 
@@ -74,8 +80,12 @@ class LoginController extends Controller
 
 // The text to draw
         $text = ''.rand(1000,9999);
+        $request -> session() -> put('img_code',$text);
+
+        $request -> session() ->save();
+//        $session->save();
 // Replace path by your own font path
-        $font = storage_path().'comic.ttf';
+        $font = storage_path().'/comic.ttf';
 
 // Add some shadow to the text
         $i = 0;
@@ -92,6 +102,7 @@ class LoginController extends Controller
 // Using imagepng() results in clearer text compared with imagejpeg()
         imagepng($im);
         imagedestroy($im);
+        exit;
     }
 
     public function test23(){
@@ -99,13 +110,16 @@ class LoginController extends Controller
     }
 
 
+
     public function getImageCodeUrl(Request $request){
         $request -> session() -> start();
         $sid = $request -> session() -> getId();
-        $arr['url'] = 'http://api3.mazhanliang.top/showImageCode';
+        $arr['url'] = 'http://api3.mazhanliang.top/showImageCode?sid='.$sid;
         $arr['sid'] = $sid;
 
-        
+         return $this->success($arr);
+
+
 
 //        var_dump($sid);
     }

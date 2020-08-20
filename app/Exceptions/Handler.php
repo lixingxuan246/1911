@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
                 'msg' => $msg,
                 'data' => []
             ];
-            echo json_encode($api_error);
+            echo json_encode($api_error,JSON_UNESCAPED_UNICODE);
             exit;
 //            return reponse()->json( $api_error );
 
