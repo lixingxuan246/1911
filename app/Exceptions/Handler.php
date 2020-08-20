@@ -36,22 +36,28 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-
-        if ($exception instanceof ApiException) {
-            $msg = $exception->getMessage();
-            $code = $exception->getCode();
+        if($exception instanceof ApiException){
+            $msg = $exception -> getMessage();
+            $code = $exception ->getCode();
             $api_error = [
-                'status' => $code,
-                'msg' => $msg,
-                'data' => []
+                'status'=>$code,
+                'msg'=>$msg,
+                'data'=>[]
             ];
+<<<<<<< HEAD
             echo json_encode($api_error,JSON_UNESCAPED_UNICODE);
             exit;
 //            return reponse()->json( $api_error );
 
 
             parent::report($exception);
+=======
+            echo json_encode($api_error);exit;
+//            return response() ->json($api_error);
+//            exit;
+>>>>>>> 89aab74c10d1d3a351126368354bc2b7722c8405
         }
+        parent::report($exception);
     }
 
     /**

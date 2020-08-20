@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+<<<<<<< HEAD
 
 Route::post('/login','LoginController@login');
 Route::get('/test','LoginController@test');
@@ -27,3 +28,6 @@ Route::post('/sendMsgCode','MsgController@sendMsgCode');
 
 Route::post('/ok','MsgController@ok');
 
+=======
+Route::any('/login','Pc\NewsController@login');
+>>>>>>> 89aab74c10d1d3a351126368354bc2b7722c8405
