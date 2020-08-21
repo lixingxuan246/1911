@@ -47,6 +47,15 @@ class Handler extends ExceptionHandler
             echo json_encode($api_error);exit;
 //            return response() ->json($api_error);
 //            exit;
+            echo json_encode($api_error,JSON_UNESCAPED_UNICODE);
+            exit;
+//            return reponse()->json( $api_error );
+
+
+            parent::report($exception);
+            echo json_encode($api_error);exit;
+//            return response() ->json($api_error);
+//            exit;
         }
         parent::report($exception);
     }

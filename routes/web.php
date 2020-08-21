@@ -15,3 +15,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::any('/logins','Pc\NewsController@login');
+
+Route::post('/login','LoginController@login');
+Route::get('/test','LoginController@test');
+Route::get('/showImageCode','LoginController@showImageCode');
+
+
+Route::get('/getImgUrl','LoginController@getImageCodeUrl');
+Route::get('/test23','LoginController@test23');
+
+Route::post('/sendMsgCode','MsgController@sendMsgCode');
+
+Route::post('/ok','MsgController@ok');
+
+Route::any('/login','Pc\NewsController@login');

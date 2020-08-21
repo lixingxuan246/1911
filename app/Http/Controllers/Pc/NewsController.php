@@ -61,6 +61,11 @@ class NewsController extends CommonController
                 Redis::del($error_key);
             }
 
+            throw new ApiException('用户手机号不存在');
+        }
+        $this ->checkUserStatus($user_obj);
+        #验证密码
+        if($password==$user_obj->password){
             #生成token
             $token =  md5( uniqid() );
             $api_response = collect($user_obj)->toArray();
@@ -70,6 +75,14 @@ class NewsController extends CommonController
             Redis::expire($user_key,120*60);
             return $this->success($api_response);
         }
+
+//            var_dump($api_response);exit;
+            $user_key = 'user_info_'.$user_obj->user_id;
+            Redis::hmset($user_key,$api_response);
+            Redis::expire($user_key,120);
+            echo $token;
+        }
+
 
     }
 }
