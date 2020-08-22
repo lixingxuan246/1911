@@ -1,31 +1,31 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+//注册 接口
+Route::any('/reg','UserController@reg');
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::any('/logins','Pc\NewsController@login');
 
+
+//登录 接口
 Route::post('/login','LoginController@login');
-Route::get('/test','LoginController@test');
+
+//图片验证码
 Route::get('/showImageCode','LoginController@showImageCode');
 
-
+//图片验证码
 Route::get('/getImgUrl','LoginController@getImageCodeUrl');
-Route::get('/test23','LoginController@test23');
 
+
+//发送短信验证码
 Route::post('/sendMsgCode','MsgController@sendMsgCode');
 
-Route::post('/ok','MsgController@ok');
+//登录
+Route::any('/login','Login\LoginController@login');
 
-Route::any('/login','Pc\NewsController@login');
+
+
+
+
+
+// API控制器
+
+Route::any('/newsList','api\NewsController@newsList'); //news列表

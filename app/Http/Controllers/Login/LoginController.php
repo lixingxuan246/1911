@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Pc;
+namespace App\Http\Controllers\Login;
 
-use App\Http\Controllers\CommonController;
+
 use App\Http\Controllers\Controller;
 use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\Redis;
 
-class NewsController extends CommonController
+class LoginController extends CommonController
 {
     /**
      * 登录接口
@@ -77,12 +77,9 @@ class NewsController extends CommonController
         }
 
 //            var_dump($api_response);exit;
-            $user_key = 'user_info_'.$user_obj->user_id;
-            Redis::hmset($user_key,$api_response);
-            Redis::expire($user_key,120);
-            echo $token;
-        }
-
-
+        $user_key = 'user_info_'.$user_obj->user_id;
+        Redis::hmset($user_key,$api_response);
+        Redis::expire($user_key,120);
+        echo $token;
     }
 }

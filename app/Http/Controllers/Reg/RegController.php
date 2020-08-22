@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Reg;
 
 use Illuminate\Http\Request;
 use AlibabaCloud\Client\AlibabaCloud;
 use App\Exceptions\ApiException;
 use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
-class LoginController extends CommonController
+class RegController extends CommonController
 {
     /*
      * 登录接口
@@ -26,7 +26,7 @@ class LoginController extends CommonController
         echo json_encode(['code'=>'00001','msg'=>'发送失败']);die;
     }
 
-
+//短信验证码
     public function sendMsgCode(){
 
         $host = "http://dingxin.market.alicloudapi.com";
@@ -105,19 +105,14 @@ class LoginController extends CommonController
         exit;
     }
 
-    public function test23(){
-        phpinfo();
-    }
-
-
-
+//图片验证码
     public function getImageCodeUrl(Request $request){
         $request -> session() -> start();
         $sid = $request -> session() -> getId();
         $arr['url'] = 'http://api3.mazhanliang.top/showImageCode?sid='.$sid;
         $arr['sid'] = $sid;
 
-         return $this->success($arr);
+        return $this->success($arr);
 
 
 
