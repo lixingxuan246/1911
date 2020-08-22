@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ApiException;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
-use App\models\UserTokenModel;
+use App\Models\UserTokenModel;
 
 class CommonController extends Controller
 {
@@ -41,7 +41,7 @@ class CommonController extends Controller
     /**
      * 生成令牌存入数据库
      */
-    private function _createUserToken($user_id ,$tt)
+    public function UserToken($user_id ,$tt)
     {
         $token = md5( uniqid() );
         $now = time();

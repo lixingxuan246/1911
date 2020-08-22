@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::any('/logins','Pc\NewsController@login');
+Route::any('/clickNumber','Pc\NewsController@clickNumber');//浏览量
+Route::any('/clickCount','Pc\NewsController@clickCount');//点赞
+
 
 Route::post('/login','LoginController@login');
 Route::get('/test','LoginController@test');
@@ -28,4 +31,4 @@ Route::post('/sendMsgCode','MsgController@sendMsgCode');
 
 Route::post('/ok','MsgController@ok');
 
-Route::any('/login','Pc\NewsController@login');
+
