@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Exceptions\ApiException;
-use App\Models\UserModel;
+use App\Models\NewsUserModel;
 use Illuminate\Http\Request;
 use App\Models\UserTokenModel;
+use Illuminate\Support\Facades\Redis;
 
 class CommonController extends Controller
 {
@@ -32,7 +33,7 @@ class CommonController extends Controller
     /**
      * 检测用户状态
      */
-    public function checkUserStatus(UserModel $user_obj)
+    public function checkUserStatus(NewsUserModel $user_obj)
     {
         if($user_obj ->status == 2){
             throw new ApiException('你的账号被冻结');
@@ -41,7 +42,7 @@ class CommonController extends Controller
     /**
      * 生成令牌存入数据库
      */
-    public function UserToken($user_id ,$tt)
+    public function  UserToken($user_id ,$tt)
     {
         $token = md5( uniqid() );
         $now = time();
@@ -74,7 +75,6 @@ class CommonController extends Controller
     //检测用户的令牌
     public function checkUserToken(){
         $request=request();
-
         $user_id=$request->post('user_id');
         $token=$request->post('token');
         $tt=$request->post('tt');
@@ -108,8 +108,6 @@ class CommonController extends Controller
         if(env('MSG_SEND_MARK')==0){
             return true;
         }
-
-
         $host="http://smsmsgs.market.alicloudapi.com";
         $path="/dx/sendSms";
         $method="POST";
@@ -138,5 +136,20 @@ class CommonController extends Controller
         }else{
             return false;
         }
+    }
+    public function getCacheVersion($cache_type='news'){
+        switch($cache_type){
+            case 'news':
+                $cache_version_key = 'news_cache_version';
+                $version = Redis::get($cache_version_key);
+                break;
+            default:
+                break;
+        }
+        if(empty($version)){
+            Redis::set($cache_version_key,1);
+            $version = 1;
+        }
+        return $version;
     }
 }

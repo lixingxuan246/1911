@@ -14,21 +14,36 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::any('/logins','Pc\NewsController@login');
-Route::any('/clickNumber','Pc\NewsController@clickNumber');//浏览量
-Route::any('/clickCount','Pc\NewsController@clickCount');//点赞
+Route::any('/logins','Pc\PcController@login');
+Route::any('/clickNumber','Pc\PcController@clickNumber');//浏览量
+Route::any('/clickCount','Pc\PcController@clickCount');//点赞
 
 
+//注册 接口
+Route::any('/reg','UserController@reg');
+
+
+
+
+//登录 接口
 Route::post('/login','LoginController@login');
-Route::get('/test','LoginController@test');
+
+//图片验证码
 Route::get('/showImageCode','LoginController@showImageCode');
 
-
+//图片验证码
 Route::get('/getImgUrl','LoginController@getImageCodeUrl');
-Route::get('/test23','LoginController@test23');
 
+
+//发送短信验证码
 Route::post('/sendMsgCode','MsgController@sendMsgCode');
 
-Route::post('/ok','MsgController@ok');
 
+
+
+
+
+
+
+Route::any('/newsList','api\NewsController@newsList'); //news列表
 

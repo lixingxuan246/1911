@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Pc;
 
 use App\Http\Controllers\CommonController;
-use App\Http\Controllers\Controller;
 use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
-use App\Models\UserModel;
+use App\Models\NewsUserModel;
 use Illuminate\Support\Facades\Redis;
 use App\Models\NewsModel;
 
-class NewsController extends CommonController
+class PcController extends CommonController
 {
     /**
      * 登录接口
@@ -20,7 +19,7 @@ class NewsController extends CommonController
         $phone = $this->checkApiParam('phone');
         $password = $this->checkApiParam('password');
         $tt =$this->checkApiParam('tt');
-        $user_model = new UserModel();
+        $user_model = new NewsUserModel();
         $where =[
             ['phone','=',$phone],
         ];
