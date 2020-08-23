@@ -1,14 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Login;
+namespace App\Http\Controllers\Pc;
 
+<<<<<<< HEAD:app/Http/Controllers/Login/LoginController.php
 use App\Http\Controllers\Controller;
+=======
+use App\Http\Controllers\CommonController;
+>>>>>>> 86ae948e9d487bff053afc83b0f11c5329e30da9:app/Http/Controllers/Pc/PcController.php
 use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
-use App\Models\UserModel;
+use App\Models\NewsUserModel;
 use Illuminate\Support\Facades\Redis;
+use App\Models\NewsModel;
 
-class LoginController extends CommonController
+class PcController extends CommonController
 {
     /**
      * 登录接口
@@ -18,7 +23,7 @@ class LoginController extends CommonController
         $phone = $this->checkApiParam('phone');
         $password = $this->checkApiParam('password');
         $tt =$this->checkApiParam('tt');
-        $user_model = new UserModel();
+        $user_model = new NewsUserModel();
         $where =[
             ['phone','=',$phone],
         ];
@@ -60,13 +65,9 @@ class LoginController extends CommonController
                 Redis::del($error_key);
             }
 
-            throw new ApiException('用户手机号不存在');
-        }
-        $this ->checkUserStatus($user_obj);
-        #验证密码
-        if($password==$user_obj->password){
             #生成token
-            $token =  md5( uniqid() );
+            $token = $this-> UserToken($user_obj->user_id,$tt);
+
             $api_response = collect($user_obj)->toArray();
             $api_response['token']=$token;
             $user_key = 'user_info_'.$user_obj->user_id;
@@ -74,11 +75,57 @@ class LoginController extends CommonController
             Redis::expire($user_key,120*60);
             return $this->success($api_response);
         }
+    }
 
-//            var_dump($api_response);exit;
-        $user_key = 'user_info_'.$user_obj->user_id;
-        Redis::hmset($user_key,$api_response);
-        Redis::expire($user_key,120);
-        echo $token;
+    /**
+     * 浏览量接口
+     */
+    public function clickNumber(Request $request)
+    {
+//        $user_id = $this->checkApiParam('user_id');
+        $news_id = $this->checkApiParam('news_id');
+        $where = [
+            ['news_id','=',$news_id]
+        ];
+        $news_model = new NewsModel();
+
+        $news_obj = $news_model->where($where)->first();
+        $number = $news_obj->browse_count +1;
+        $data = [
+            'browse_count'=>$number
+        ];
+        if($news_obj){
+            $news_model::where('news_id','=',$news_id)->update($data);
+            return $this->success($news_obj);
+        }else{
+            throw new ApiException('该新闻不存在');
+        }
+    }
+    /**
+     * 点赞接口
+     */
+    public function clickCount(Request $request)
+    {
+        $user_id = $request ->post('user_id');
+        $news_id = $this->checkApiParam('news_id');
+        if(!$user_id){
+           return $this->success('请登录','233','error');
+        }else{
+            $where = [
+                ['news_id','=',$news_id]
+            ];
+            $news_model = new NewsModel();
+            $obj = $news_model::where($where)->first();
+            if($obj){
+                $number = $obj->click_count +1;
+                $data = [
+                    'click_count'=>$number
+                ];
+                $news_model::where('news_id','=',$news_id)->update($data);
+                return $this->success($obj);
+            }else{
+                throw new ApiException('该新闻不存在');
+            }
+        }
     }
 }
