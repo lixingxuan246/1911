@@ -22,10 +22,6 @@ Route::post('/sendMsgCode','MsgController@sendMsgCode');
 Route::any('/login','Login\LoginController@login');
 
 
+// 新闻列表
 
-
-
-
-// API控制器
-
-Route::any('/newsList','api\NewsController@newsList'); //news列表
+Route::any('/newsList','News\NewsController@newsList');

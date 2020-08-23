@@ -10,3 +10,5 @@ $obj=new A();
 $obj->aa();
 
 //App\Http\Controllers\NewsController
+
+
