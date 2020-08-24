@@ -48,7 +48,11 @@ class UserController extends CommonController
         $user_model -> status = 1;
         $user_model -> save();
 
+<<<<<<< HEAD
             return $this->success();
+=======
+        return $this->success();
+>>>>>>> master
 
     }
 }

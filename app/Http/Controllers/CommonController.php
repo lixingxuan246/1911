@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 //所有控制器的父类，用来写一些公用的方法
 namespace App\Http\Controllers;
 use App\models\UserTokenModel;
@@ -13,6 +14,83 @@ class CommonController extends Controller
             'data'=>$data
         ];
     }
+=======
+
+namespace App\Http\Controllers;
+use App\Exceptions\ApiException;
+use App\Models\UserModel;
+use App\Models\UserTokenModel;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
+
+
+class CommonController extends Controller
+{
+    /**
+     * 接口调用成功返回的信息
+     */
+    public function success( $data = [], $status = 200 , $msg = 'success'){
+        return [
+            'status'=>$status,
+            'msg' =>$msg,
+            'data'=>$data
+        ];
+    }
+    /**
+     * 检测收是否缺少参数
+     */
+    public function checkApiParam( $key){
+        $request = request();
+        if(empty( $value = $request -> post($key) ) ){
+            throw new ApiException('缺少参数'.$key);
+        }
+        return $value;
+    }
+
+    /**
+     * 检测用户状态
+     */
+    public function checkUserStatus(UserModel $user_obj)
+    {
+        if($user_obj ->status == 2){
+            throw new ApiException('你的账号被冻结');
+        }
+    }
+    /**
+     * 生成令牌存入数据库
+     */
+    private function _createUserToken($user_id ,$tt)
+    {
+        $token = md5( uniqid() );
+        $now = time();
+        $user_token_model = new UserTokenModel();
+        #查询对应的中端是否登录过
+        $where = [
+            ['user_id','=',$user_id],
+            ['tt','=',$tt],
+            ['expire','>',$now]
+        ];
+        $user_token_obj = $user_token_model->where($where)->first();
+        if(!$user_token_obj){
+            $user_token_model->user_id = $user_id;
+            $user_token_model->tt = $tt;
+            $user_token_model->token = $token;
+            $user_token_model->expire = time() + 7200;
+            $user_token_model->status = 1;
+            $user_token_model->ctime = time();
+            $token_result = $user_token_model->save();
+        }else{
+            $user_token_obj->expire = time() + 7200;
+            $token_result = $user_token_obj->save();
+        }
+        if($token_result){
+            return $token;
+        }else{
+            throw new ApiException('令牌错误');
+        }
+    }
+>>>>>>> master
     //检测用户的令牌
     public function checkUserToken(){
         $request=request();
@@ -46,6 +124,7 @@ class CommonController extends Controller
 
         return true;
     }
+<<<<<<< HEAD
     //检查是否缺少必要参数
     public function checkApiParam($key){
         $request=request();
@@ -54,6 +133,8 @@ class CommonController extends Controller
         }
         return $value;
     }
+=======
+>>>>>>> master
     public function sendAliMsgCode(){
         if(env('MSG_SEND_MARK')==0){
             return true;
@@ -89,4 +170,23 @@ class CommonController extends Controller
             return false;
         }
     }
+<<<<<<< HEAD
 }
+=======
+    public function getCacheVersion($cache_type='news'){
+        switch($cache_type){
+            case 'news':
+                $cache_version_key = 'news_cache_version';
+                $version = Redis::get($cache_version_key);
+                break;
+            default:
+                break;
+        }
+        if(empty($version)){
+            Redis::set($cache_version_key,1);
+            $version = 1;
+        }
+        return $version;
+    }
+}
+>>>>>>> master
