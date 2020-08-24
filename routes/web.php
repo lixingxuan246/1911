@@ -40,10 +40,15 @@ Route::post('/sendMsgCode','MsgController@sendMsgCode');
 
 
 
+// 新闻列表
+
+
+Route::any('/newsList','News\NewsController@newsList');
 
 
 
 
 
 Route::any('/newsList','api\NewsController@newsList'); //news列表
+
 

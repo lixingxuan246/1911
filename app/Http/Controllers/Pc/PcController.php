@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Pc;
 
+use App\Http\Controllers\Controller;
+
 use App\Http\Controllers\CommonController;
+
 use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 use App\Models\NewsUserModel;
