@@ -118,7 +118,7 @@ class PcController extends CommonController
                     'click_count'=>$number
                 ];
                 $news_model::where('news_id','=',$news_id)->update($data);
-                return $this->success($obj);
+                return $this->success("点赞成功");
             }else{
                 throw new ApiException('该新闻不存在');
             }
