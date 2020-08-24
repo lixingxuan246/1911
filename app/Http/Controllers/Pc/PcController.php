@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Pc;
 
-<<<<<<< HEAD:app/Http/Controllers/Login/LoginController.php
-use App\Http\Controllers\Controller;
-=======
 use App\Http\Controllers\CommonController;
->>>>>>> 86ae948e9d487bff053afc83b0f11c5329e30da9:app/Http/Controllers/Pc/PcController.php
+
 use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 use App\Models\NewsUserModel;
@@ -122,7 +119,7 @@ class PcController extends CommonController
                     'click_count'=>$number
                 ];
                 $news_model::where('news_id','=',$news_id)->update($data);
-                return $this->success($obj);
+                return $this->success("点赞成功");
             }else{
                 throw new ApiException('该新闻不存在');
             }

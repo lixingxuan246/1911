@@ -42,13 +42,14 @@ Route::post('/sendMsgCode','MsgController@sendMsgCode');
 
 // 新闻列表
 
-<<<<<<< HEAD
+
 Route::any('/newsList','News\NewsController@newsList');
-=======
+
+Route::any('/newsList','News\NewsController@newsList');
 
 
 
 
 Route::any('/newsList','api\NewsController@newsList'); //news列表
 
->>>>>>> 86ae948e9d487bff053afc83b0f11c5329e30da9
+
