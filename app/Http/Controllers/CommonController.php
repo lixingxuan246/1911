@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 use App\models\UserTokenModel;
 use App\Exceptions\ApiException;
+use App\Http\ParamMsg\param;
 use App\Models\NewsUserModel;
 use Illuminate\Http\Request;
 
@@ -29,6 +30,24 @@ class CommonController extends Controller
             throw new ApiException('缺少参数'.$key);
         }
         return $value;
+    }
+    //检测是否缺少必要参数
+    public function checkApiParams( $key ){
+        $request = request();
+        if( empty($value = $request ->post($key) ) ){
+            $error = param::PARAM_MISS;
+            if( !empty($error[$key]) ){
+                throw new ApiException(
+                    $error[$key]['msg'] ,
+                    $error[$key]['code']
+                );
+            }else{
+                throw new ApiException(
+                    sprintf($error['other']['msg'] , $key) ,
+                    $error['other']['code']
+                );
+            }
+        }
     }
 
     /**

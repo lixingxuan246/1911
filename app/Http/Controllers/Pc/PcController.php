@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Pc;
 
 use App\Http\Controllers\CommonController;
-
 use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 use App\Models\NewsUserModel;
 use Illuminate\Support\Facades\Redis;
 use App\Models\NewsModel;
+use App\Models\NewsClickModel;
 
 class PcController extends CommonController
 {
@@ -108,21 +108,106 @@ class PcController extends CommonController
         if(!$user_id){
            return $this->success('请登录','233','error');
         }else{
-            $where = [
+            $news_click_model = new NewsClickModel();
+            $where2 = [
+                ['user_id','=',$user_id],
                 ['news_id','=',$news_id]
             ];
-            $news_model = new NewsModel();
-            $obj = $news_model::where($where)->first();
-            if($obj){
-                $number = $obj->click_count +1;
-                $data = [
-                    'click_count'=>$number
-                ];
-                $news_model::where('news_id','=',$news_id)->update($data);
-                return $this->success("点赞成功");
+            $click_obj = $news_click_model::where($where2)->first();
+            if($click_obj){
+                if($click_obj->is_click == 1 ){
+                    return $this->success("已点赞");
+                }else{
+                    $data2 = [
+                        'is_click'=> 1
+                    ];
+                    $news_click_model::where($where2)->update($data2);
+
+                    $where = [
+                        ['news_id','=',$news_id]
+                    ];
+                    $news_model = new NewsModel();
+                    $obj = $news_model::where($where)->first();
+                    if($obj){
+                        $number = $obj->click_count +1;
+                        $data = [
+                            'click_count'=>$number
+                        ];
+                        $news_model::where('news_id','=',$news_id)->update($data);
+                        return $this->success("点赞成功");
+                    }else{
+                        throw new ApiException('该新闻不存在');
+                    }
+                }
+
             }else{
-                throw new ApiException('该新闻不存在');
+                $news_click_model ->user_id = $user_id;
+                $news_click_model ->news_id = $news_id;
+                $news_click_model ->is_click = 1;
+                $res = $news_click_model ->save();
+                if($res){
+
+                    $where = [
+                        ['news_id','=',$news_id]
+                    ];
+                    $news_model = new NewsModel();
+                    $obj = $news_model::where($where)->first();
+                    if($obj){
+                        $number = $obj->click_count +1;
+                        $data = [
+                            'click_count'=>$number
+                        ];
+                        $news_model::where('news_id','=',$news_id)->update($data);
+                        return $this->success("点赞成功");
+                    }else{
+                        throw new ApiException('该新闻不存在');
+                    }
+                }else{
+                    return $this->success("操作失败");
+                }
             }
         }
+    }
+    /**
+     * 取消点赞
+     */
+    public function unclickCount(Request $request)
+    {
+        $user_id = $request ->post('user_id');
+        $news_id = $this->checkApiParam('news_id');
+        $news_click_model = new NewsClickModel();
+        $where = [
+            ['user_id','=',$user_id],
+            ['news_id','=',$news_id]
+        ];
+        $click_obj = $news_click_model::where($where)->first();
+        if($click_obj){
+            if($click_obj->is_click != 2 ){
+                $data2 = [
+                    'is_click'=> 2
+                ];
+                $news_click_model::where($where)->update($data2);
+                $where2 = [
+                    ['news_id','=',$news_id]
+                ];
+                $news_model = new NewsModel();
+                $obj = $news_model::where($where2)->first();
+                if($obj){
+                    $number = $obj->click_count - 1;
+                    $data = [
+                        'click_count'=>$number
+                    ];
+                    $news_model::where('news_id','=',$news_id)->update($data);
+                    return $this->success("取消点赞成功");
+                }else{
+                    throw new ApiException('该新闻不存在');
+                }
+            }
+        }else{
+            throw new ApiException('该新闻未点赞');
+        }
+
+
+
     }
 }
