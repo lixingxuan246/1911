@@ -19,11 +19,11 @@ class CreateUsersTable extends Migration
             #字符集
             $table->charset = 'utf8';
             #校对
-            $table->collation = 'utf8_unicode_ci';
+            $table->collation = 'utf8_croatian_ci';
 
-            $table->bigint('id')->comment('用户id，主键');
-            $table->timestamps('create_at');
-            $table->timestamps('update_at');
+            $table->bigInteger('id')->comment('用户id，主键');
+            $table->dateTime('create_at');
+            $table->dateTime('update_at');
         });
     }
 
