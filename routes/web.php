@@ -17,7 +17,7 @@ Route::get('/', function () {
 Route::any('/logins','Pc\PcController@login');
 Route::any('/clickNumber','Pc\PcController@clickNumber');//浏览量
 Route::any('/clickCount','Pc\PcController@clickCount');//点赞
-
+Route::any('/unclickCount','Pc\PcController@unclickCount');//取消点赞
 
 //注册 接口
 Route::any('/reg','UserController@reg');
