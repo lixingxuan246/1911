@@ -45,6 +45,7 @@ Route::post('/sendMsgCode','MsgController@sendMsgCode');
 
 Route::any('/newsList','News\NewsController@newsList');
 
+Route::any('/newsList','News\NewsController@newsList');
 
 
 
