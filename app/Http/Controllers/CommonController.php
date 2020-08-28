@@ -1,35 +1,18 @@
 <?php
-<<<<<<< HEAD
+
 //所有控制器的父类，用来写一些公用的方法
 namespace App\Http\Controllers;
 use App\models\UserTokenModel;
+use App\Exceptions\ApiException;
+use App\Models\NewsUserModel;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Redis;
 
 class CommonController extends Controller
 {
     //接口调用成功的返回信息
-    public function success($data=[],$status=200,$msg='success'){
-        return[
-            'status'=>$status,
-            'msg'=>$msg,
-            'data'=>$data
-        ];
-    }
-=======
 
-namespace App\Http\Controllers;
-use App\Exceptions\ApiException;
-use App\Models\UserModel;
-use App\Models\UserTokenModel;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-
-
-class CommonController extends Controller
-{
-    /**
-     * 接口调用成功返回的信息
-     */
     public function success( $data = [], $status = 200 , $msg = 'success'){
         return [
             'status'=>$status,
@@ -51,7 +34,7 @@ class CommonController extends Controller
     /**
      * 检测用户状态
      */
-    public function checkUserStatus(UserModel $user_obj)
+    public function checkUserStatus(NewsUserModel $user_obj)
     {
         if($user_obj ->status == 2){
             throw new ApiException('你的账号被冻结');
@@ -60,7 +43,7 @@ class CommonController extends Controller
     /**
      * 生成令牌存入数据库
      */
-    private function _createUserToken($user_id ,$tt)
+    public function  UserToken($user_id ,$tt)
     {
         $token = md5( uniqid() );
         $now = time();
@@ -90,11 +73,10 @@ class CommonController extends Controller
             throw new ApiException('令牌错误');
         }
     }
->>>>>>> master
+
     //检测用户的令牌
     public function checkUserToken(){
         $request=request();
-
         $user_id=$request->post('user_id');
         $token=$request->post('token');
         $tt=$request->post('tt');
@@ -124,23 +106,14 @@ class CommonController extends Controller
 
         return true;
     }
-<<<<<<< HEAD
-    //检查是否缺少必要参数
-    public function checkApiParam($key){
-        $request=request();
-        if(empty($value=$request->post($key))){
-            throw new ApiException('缺少参数',$key);
-        }
-        return $value;
-    }
-=======
->>>>>>> master
+
+
+
+
     public function sendAliMsgCode(){
         if(env('MSG_SEND_MARK')==0){
             return true;
         }
-
-
         $host="http://smsmsgs.market.alicloudapi.com";
         $path="/dx/sendSms";
         $method="POST";
@@ -170,9 +143,9 @@ class CommonController extends Controller
             return false;
         }
     }
-<<<<<<< HEAD
-}
-=======
+
+
+
     public function getCacheVersion($cache_type='news'){
         switch($cache_type){
             case 'news':
@@ -189,4 +162,5 @@ class CommonController extends Controller
         return $version;
     }
 }
->>>>>>> master
+
+

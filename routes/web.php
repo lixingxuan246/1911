@@ -29,8 +29,14 @@ Route::get('/', function () {
 //Route::post('/ok','MsgController@ok');
 //Route::get('/oks','MsgController@oks');
 
+Route::any('/logins','Pc\PcController@login');
+Route::any('/clickNumber','Pc\PcController@clickNumber');//浏览量
+Route::any('/clickCount','Pc\PcController@clickCount');//点赞
+
+
 //注册 接口
 Route::any('/reg','UserController@reg');
+
 
 
 
@@ -47,15 +53,18 @@ Route::get('/getImgUrl','LoginController@getImageCodeUrl');
 //发送短信验证码
 Route::post('/sendMsgCode','MsgController@sendMsgCode');
 
-//登录
-Route::any('/login','Login\LoginController@login');
+
+
+// 新闻列表
+
+
+Route::any('/newsList','News\NewsController@newsList');
+
+Route::any('/newsList','News\NewsController@newsList');
 
 
 
-
-
-
-// API控制器
 
 Route::any('/newsList','api\NewsController@newsList'); //news列表
+
 
