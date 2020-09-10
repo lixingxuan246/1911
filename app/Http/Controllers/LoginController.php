@@ -7,6 +7,7 @@ use AlibabaCloud\Client\AlibabaCloud;
 use App\Exceptions\ApiException;
 use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
+use DB;
 class LoginController extends CommonController
 {
     /*
@@ -26,6 +27,10 @@ class LoginController extends CommonController
         echo json_encode(['code'=>'00001','msg'=>'发送失败']);die;
     }
 
+    public function aa(){
+        $data = DB::table('tital')->select('*')->get()->toArray();
+        return $data;
+    }
 
     public function sendMsgCode(){
 

@@ -37,7 +37,7 @@ Route::any('/unclickCount','Pc\PcController@unclickCount');//取消点赞
 //注册 接口
 Route::any('/reg','UserController@reg');
 
-
+Route::any('/aa','LoginController@aa');
 
 
 //登录 接口
